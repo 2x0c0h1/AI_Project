@@ -76,3 +76,11 @@ model.fit_generator(
     callbacks=[TQDMCallback()],
     validation_data=validation_generator,
     validation_steps= 300 // 16)
+
+# serialize model to YAML
+model_yaml = model.to_yaml()
+with open("model.yaml", "w") as yaml_file:
+    yaml_file.write(model_yaml)
+# serialize weights to HDF5
+model.save_weights("model.h5")
+print("Saved model to disk")
