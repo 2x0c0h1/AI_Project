@@ -50,7 +50,7 @@ model.add(Dropout(0.5))
 model.add(Dense(6, activation='softmax'))
 
 model.compile(loss='categorical_crossentropy',
-              optimizer='adam',
+              optimizer='Nadam',
               metrics=['accuracy'])
 
 train_datagen = ImageDataGenerator(

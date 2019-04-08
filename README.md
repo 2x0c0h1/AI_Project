@@ -1,2 +1,2 @@
 # AI_Project
-Classify Laptops
+Classifying Laptops with Keras
