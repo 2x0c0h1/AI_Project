@@ -8,8 +8,8 @@ config:
       activity_regularizer: null
       batch_input_shape: !!python/tuple
       - null
-      - 128
-      - 128
+      - 170
+      - 170
       - 3
       bias_constraint: null
       bias_initializer:
@@ -113,7 +113,7 @@ config:
       - 3
       - 3
       name: conv2d_2
-      padding: same
+      padding: valid
       strides: *id003
       trainable: true
       use_bias: true
@@ -189,7 +189,7 @@ config:
       - 3
       - 3
       name: conv2d_3
-      padding: same
+      padding: valid
       strides: *id003
       trainable: true
       use_bias: true
@@ -323,7 +323,7 @@ config:
       trainable: true
   - class_name: Dense
     config:
-      activation: linear
+      activation: relu
       activity_regularizer: null
       bias_constraint: null
       bias_initializer:
@@ -341,13 +341,8 @@ config:
       kernel_regularizer: null
       name: dense_1
       trainable: true
-      units: 96
+      units: 256
       use_bias: true
-  - class_name: Activation
-    config:
-      activation: relu
-      name: activation_5
-      trainable: true
   - class_name: BatchNormalization
     config:
       axis: -1

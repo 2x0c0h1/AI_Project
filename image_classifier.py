@@ -6,7 +6,7 @@ from keras.layers import (Dropout, Flatten, Dense, Conv2D,
 from keras_tqdm import TQDMCallback
 
 #Image Dimensions
-img_width, img_height, img_depth = 128, 128, 3
+img_width, img_height, img_depth = 170, 170, 3
 
 #Image folder directories
 train_data_dir = 'images'
@@ -22,13 +22,13 @@ model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(3, 3)))
 model.add(Dropout(0.5))
 
-model.add(Conv2D(32, (3, 3), padding="same"))
+model.add(Conv2D(32, (3, 3)))
 model.add(Activation("relu"))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.5))
 
-model.add(Conv2D(64, (3, 3), padding="same"))
+model.add(Conv2D(64, (3, 3)))
 model.add(Activation("relu"))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2, 2)))
@@ -41,16 +41,18 @@ model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.5))
 
 model.add(Flatten())
-model.add(Dense(96))
-model.add(Activation("relu"))
+model.add(Dense(activation='relu', units=170))
 model.add(BatchNormalization())
 model.add(Dropout(0.5))
 
 #Output
 model.add(Dense(6, activation='softmax'))
 
+#sgd = optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.8, nesterov=True)
+adadelta = optimizers.Adadelta(lr=0.95, rho=0.95, epsilon=1e-08, decay=0.0)
+
 model.compile(loss='categorical_crossentropy',
-              optimizer='Nadam',
+              optimizer=adadelta,
               metrics=['accuracy'])
 
 train_datagen = ImageDataGenerator(
@@ -62,7 +64,7 @@ train_datagen = ImageDataGenerator(
 test_datagen = ImageDataGenerator(rescale=1. / 255)
 
 epochs = 40
-batch_size = 50
+batch_size = 40
 
 train_generator = train_datagen.flow_from_directory(
     train_data_dir,
@@ -83,7 +85,7 @@ H = model.fit_generator(
     verbose=0,
     callbacks=[TQDMCallback()],
     validation_data=validation_generator,
-    validation_steps= 300 // 50)
+    validation_steps= 14)
 
 import matplotlib.pyplot as plt
 import numpy as np

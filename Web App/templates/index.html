@@ -2,14 +2,21 @@
 
 <head>
 	<title>Laptop Classifier</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 
 <body>
-	<div>
-		<form method="post" action="/" enctype=multipart/form-data> Upload Image <br>
+	<div class="container" style="margin-top: 140px;">
+		<h1>Laptop Classifier</h1>
+		<form method="post" action="/" enctype=multipart/form-data style="margin-top: 32px"> <span></span>
 			<input type="file" name="Image" required>
 			<input type='submit' value='Upload'>
 		</form>
+		{% if prediction %}
+		<div>
+			<p>Predicted: {{ prediction }}</p>
+		</div>
+		{% endif %}
 	</div>
 </body>
 

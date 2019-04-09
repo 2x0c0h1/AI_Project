@@ -1,9 +1,16 @@
-Microsoft Surface Book
-Huawei MateBook
-Dell XPS
+0 Asus ROG Zephyrus
+1 Dell XPS
+2 Huawei MateBook
+3 Lenovo Ideapad
+4 Macbook
+5 Microsoft Surface Book
+
+
+
+
+
 Asus ZenBook
 Apple MacBook Pro
-Asus ROG Zephyrus
 Acer Predator Helios
 HP Spectre Folio
 Google Pixelbook

@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import cv2
+from keras.backend import clear_session
 from keras.models import model_from_yaml
 
 from flask import Flask, flash, render_template, request, redirect, url_for
@@ -17,6 +18,7 @@ app.testing = True
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = "super secret key"
 
+classes = ['Asus ROG Zephyrus', 'Dell XPS', 'Huawei MateBook', 'Lenovo Ideapad', 'Macbook', 'Microsoft Surface Book']
 
 def classify(file_path):
     # load YAML and create model
@@ -29,13 +31,13 @@ def classify(file_path):
     print("Loaded model")
 
     img = cv2.imread(file_path)
-    img = cv2.resize(img,(128,128))
-    img = np.reshape(img,[1,128,128,3])
+    img = cv2.resize(img,(150,150))
+    img = np.reshape(img,[1,150,150,3])
 
     print("Running model")
-    classes = loaded_model.predict_classes(img)
-    print("Predicted : ", classes)
-    return classes
+    predictions = loaded_model.predict(img)
+    clear_session()
+    return predictions
 
 
 def allowed_file(filename):
@@ -44,10 +46,14 @@ def allowed_file(filename):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    if request.args.get('prediction') is None:
+        return render_template('index.html')
+    prediction = request.args['prediction']
+    return render_template('index.html', prediction=prediction)
 
 @app.route('/', methods=['POST'])
 def upload_file():
+    print("Uploading")
     if request.method == 'POST':
         if 'Image' not in request.files:
             print('No file part')
@@ -60,9 +66,13 @@ def upload_file():
             filename = secure_filename(file.filename)
             file_path = app.config['UPLOAD_FOLDER']
             file.save(file_path)
-            classify(file_path)
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
+            predictions = classify(file_path)
+            print("-----------------------------------")
+            print(predictions[0])
+            print(np.argmax(predictions[0]))
+            print(classes[np.argmax(predictions[0])])
+            print("-----------------------------------")
+            return redirect(url_for('.index', prediction=classes[np.argmax(predictions[0])]))
 
 if __name__ == '__main__':
     app.run(host = '0.0.0.0', port = 8080)
