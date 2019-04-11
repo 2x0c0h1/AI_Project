@@ -88,7 +88,7 @@ def persist_image(dir_image_src):
     image = Image.open(image_file).convert('RGB')
     resized = image.resize(size)
     with open(label_directory + hashlib.sha1(image_content).hexdigest() + ".jpg", 'wb')  as f:
-        resized.save(f, "JPEG", quality=85)
+        resized.save(f, "JPEG", quality=100)
 
     return True
 

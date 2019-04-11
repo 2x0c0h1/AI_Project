@@ -18,7 +18,7 @@ app.testing = True
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = "super secret key"
 
-classes = ['Asus ROG Zephyrus', 'Dell XPS', 'Huawei MateBook', 'Lenovo Ideapad', 'Macbook', 'Microsoft Surface Book']
+classes = ['Asus ROG Zephyrus', 'Dell XPS', 'Huawei MateBook', 'Lenovo Ideapad', 'Macbook', 'Razer Blade Stealth']
 
 def classify(file_path):
     # load YAML and create model
@@ -31,8 +31,8 @@ def classify(file_path):
     print("Loaded model")
 
     img = cv2.imread(file_path)
-    img = cv2.resize(img,(150,150))
-    img = np.reshape(img,[1,150,150,3])
+    img = cv2.resize(img,(128,128))
+    img = np.reshape(img,[1,128,128,3])
 
     print("Running model")
     predictions = loaded_model.predict(img)

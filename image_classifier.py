@@ -6,7 +6,7 @@ from keras.layers import (Dropout, Flatten, Dense, Conv2D,
 from keras_tqdm import TQDMCallback
 
 #Image Dimensions
-img_width, img_height, img_depth = 170, 170, 3
+img_width, img_height, img_depth = 128, 128, 3
 
 #Image folder directories
 train_data_dir = 'images'
@@ -22,7 +22,7 @@ model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(3, 3)))
 model.add(Dropout(0.5))
 
-model.add(Conv2D(32, (3, 3)))
+model.add(Conv2D(64, (3, 3)))
 model.add(Activation("relu"))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2, 2)))
@@ -34,37 +34,35 @@ model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.5))
 
-model.add(Conv2D(96, (3, 3), padding="same"))
+model.add(Conv2D(96, (3, 3)))
 model.add(Activation("relu"))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.5))
 
 model.add(Flatten())
-model.add(Dense(activation='relu', units=170))
+model.add(Dense(activation='relu', units=img_width))
 model.add(BatchNormalization())
-model.add(Dropout(0.5))
 
 #Output
 model.add(Dense(6, activation='softmax'))
 
-#sgd = optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.8, nesterov=True)
-adadelta = optimizers.Adadelta(lr=0.95, rho=0.95, epsilon=1e-08, decay=0.0)
+#adadelta = optimizers.Adadelta(lr=0.98, rho=0.95, epsilon=None, decay=0.0)
 
 model.compile(loss='categorical_crossentropy',
-              optimizer=adadelta,
+              optimizer='adadelta',
               metrics=['accuracy'])
 
 train_datagen = ImageDataGenerator(
     rescale=1. / 255,
     shear_range=0.3,
-    zoom_range=0.3,
-    horizontal_flip=False)
+    zoom_range=0.2,
+    horizontal_flip=True)
 
 test_datagen = ImageDataGenerator(rescale=1. / 255)
 
 epochs = 40
-batch_size = 40
+batch_size = 32
 
 train_generator = train_datagen.flow_from_directory(
     train_data_dir,
@@ -80,23 +78,23 @@ validation_generator = test_datagen.flow_from_directory(
 
 H = model.fit_generator(
     train_generator,
-    steps_per_epoch= 150,
+    steps_per_epoch= 2111 // batch_size,
     epochs=epochs,
-    verbose=0,
-    callbacks=[TQDMCallback()],
+    verbose=1,
     validation_data=validation_generator,
-    validation_steps= 14)
+    validation_steps=230 // batch_size)
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 plt.figure()
 N = epochs
-plt.plot(np.arange(0, N), H.history["loss"], label="train_loss")
-plt.plot(np.arange(0, N), H.history["val_loss"], label="val_loss")
-plt.plot(np.arange(0, N), H.history["acc"], label="train_acc")
-plt.plot(np.arange(0, N), H.history["val_acc"], label="val_acc")
-plt.title("Training Loss and Accuracy")
+f, axarr = plt.subplots(2, sharex=True)
+axarr[0].plot(np.arange(0, N), H.history["loss"], label="train_loss")
+axarr[0].plot(np.arange(0, N), H.history["val_loss"], label="val_loss")
+axarr[1].plot(np.arange(0, N), H.history["acc"], label="train_acc")
+axarr[1].plot(np.arange(0, N), H.history["val_acc"], label="val_acc")
+plt.tight_layout()
 plt.xlabel("Epoch #")
 plt.ylabel("Loss/Accuracy")
 plt.legend(loc="upper left")

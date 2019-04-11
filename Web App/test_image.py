@@ -16,11 +16,13 @@ loaded_model = model_from_yaml(loaded_model_yaml)
 loaded_model.load_weights("../model.h5")
 print("Loaded model")
 
-file_path = 'dell_xps.jpg'
+#file_path = 'asus_rog.jpg'
+file_path = 'macbook.jpg'
+#file_path = 'Microsoft_Surface_Pro_Silver.jpg'
 
 img = cv2.imread(file_path)
-img = cv2.resize(img,(150,150))
-img = np.reshape(img,[1,150,150,3])
+img = cv2.resize(img,(170,170))
+img = np.reshape(img,[1,170,170,3])
 
 print("Running model")
 predictions = loaded_model.predict(img)

@@ -8,8 +8,8 @@ config:
       activity_regularizer: null
       batch_input_shape: !!python/tuple
       - null
-      - 170
-      - 170
+      - 128
+      - 128
       - 3
       bias_constraint: null
       bias_initializer:
@@ -99,7 +99,7 @@ config:
       bias_regularizer: null
       data_format: channels_last
       dilation_rate: *id002
-      filters: 32
+      filters: 64
       kernel_constraint: null
       kernel_initializer:
         class_name: VarianceScaling
@@ -265,7 +265,7 @@ config:
       - 3
       - 3
       name: conv2d_4
-      padding: same
+      padding: valid
       strides: *id003
       trainable: true
       use_bias: true
@@ -341,7 +341,7 @@ config:
       kernel_regularizer: null
       name: dense_1
       trainable: true
-      units: 256
+      units: 128
       use_bias: true
   - class_name: BatchNormalization
     config:
@@ -367,13 +367,6 @@ config:
         config: {}
       name: batch_normalization_5
       scale: true
-      trainable: true
-  - class_name: Dropout
-    config:
-      name: dropout_5
-      noise_shape: null
-      rate: 0.5
-      seed: null
       trainable: true
   - class_name: Dense
     config:
